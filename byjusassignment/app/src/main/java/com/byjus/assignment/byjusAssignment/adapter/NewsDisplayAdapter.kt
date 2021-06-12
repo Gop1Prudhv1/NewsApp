@@ -1,8 +1,6 @@
-package com.byjus.assignment.byjus_assignment.adapter
+package com.byjus.assignment.byjusAssignment.adapter
 
 import android.content.Context
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.view.LayoutInflater
@@ -16,10 +14,11 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.byjus.assignment.byjus_assignment.R
-import com.byjus.assignment.byjus_assignment.model.NewsList
+import com.byjus.assignment.byjusAssignment.model.NewsListt
+import com.byjus.assignment.byjusAssignment.utils.DateUtils
 
 
-class NewsDisplayAdapter(var newsList: NewsList.NewsList, context: Context, val onItemClicked: (NewsList.Article) -> Unit):
+class NewsDisplayAdapter(var newsList: NewsListt.NewsList, context: Context, val onItemClicked: (NewsListt.Article) -> Unit):
         RecyclerView.Adapter<NewsDisplayAdapter.NewsHolder>(){
 
     private val mContext = context
@@ -35,7 +34,7 @@ class NewsDisplayAdapter(var newsList: NewsList.NewsList, context: Context, val 
         val article = newsList.articles[position]
         holder.newsTitle.text = article.title
         holder.newsSource.text = article.source.name
-        holder.publishedTime.text = article.publishedAt
+        holder.publishedTime.text = DateUtils.getFormattedDateString(article.publishedAt)
 
         Glide.with(mContext).load(article.urlToImage).into(object : CustomTarget<Drawable>() {
             @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)

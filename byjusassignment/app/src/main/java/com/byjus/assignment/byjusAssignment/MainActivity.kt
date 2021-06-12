@@ -1,4 +1,4 @@
-package com.byjus.assignment.byjus_assignment
+package com.byjus.assignment.byjusAssignment
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -9,8 +9,9 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toolbar
 import androidx.fragment.app.commit
-import com.byjus.assignment.byjus_assignment.fragment.NewsFeedFragment
-import com.byjus.assignment.byjus_assignment.fragment.NewsViewFragment
+import com.byjus.assignment.byjus_assignment.R
+import com.byjus.assignment.byjusAssignment.fragment.NewsFeedFragment
+import com.byjus.assignment.byjusAssignment.fragment.NewsViewFragment
 
 class MainActivity : AppCompatActivity() {
 

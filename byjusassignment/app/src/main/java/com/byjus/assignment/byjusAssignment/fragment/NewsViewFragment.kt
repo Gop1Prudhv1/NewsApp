@@ -1,4 +1,4 @@
-package com.byjus.assignment.byjus_assignment.fragment
+package com.byjus.assignment.byjusAssignment.fragment
 
 import android.graphics.drawable.Drawable
 import android.os.Build
@@ -14,7 +14,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.byjus.assignment.byjus_assignment.R
-import com.byjus.assignment.byjus_assignment.model.NewsList
+import com.byjus.assignment.byjusAssignment.model.NewsListt
+import com.byjus.assignment.byjusAssignment.utils.DateUtils
 
 class NewsViewFragment (): Fragment() {
 
@@ -51,10 +52,10 @@ class NewsViewFragment (): Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val article = (arguments?.getSerializable(NEWS_LIST_ITEM) as NewsList.Article)
+        val article = (arguments?.getSerializable(NEWS_LIST_ITEM) as NewsListt.Article)
         newsTitle.text = article?.title
         newsDesc.text = article?.description
-        publishedAt.text = article.publishedAt
+        publishedAt.text = DateUtils.getFormattedDateString(article?.publishedAt)
         source.text = article.source.name
 
         Glide.with(requireContext()).load(article.urlToImage).into(object : CustomTarget<Drawable>() {
