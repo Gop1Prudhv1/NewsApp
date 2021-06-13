@@ -23,19 +23,21 @@ import com.byjus.assignment.byjus_assignment.databinding.FragmentNewsFeedBinding
 import com.byjus.assignment.byjusAssignment.model.NewsListt
 import com.byjus.assignment.byjusAssignment.rest.ApiClient
 import com.byjus.assignment.byjusAssignment.rest.ApiInterface
+import dagger.hilt.android.AndroidEntryPoint
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 const val API_KEY = "37f0deb823454764bf560f80652c70c0"
 
+@AndroidEntryPoint
 class NewsFeedFragment(): Fragment() {
 
     private lateinit var viewBinding: FragmentNewsFeedBinding
     private var newsList: NewsListt.NewsList? = null
     private var newsDao: NewsArticlesDao? = null
     private var newsDisplayAdapter: NewsDisplayAdapter? = null
-    private lateinit var newsFeedViewModel: NewsFeedViewModel
+    private val newsFeedViewModel: NewsFeedViewModel by viewModels()
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreateView(
@@ -44,11 +46,11 @@ class NewsFeedFragment(): Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         viewBinding = FragmentNewsFeedBinding.inflate(layoutInflater)
-        newsDao = NewsArticlesDatabase.getInstance(requireContext()).newsArticlesDao
-        val application = requireNotNull(activity).application
-
-        val viewModelProvider = NewsFeedViewModelFactory(newsDao!!, application)
-        newsFeedViewModel = ViewModelProviders.of(this, viewModelProvider).get(NewsFeedViewModel::class.java)
+//        newsDao = NewsArticlesDatabase.getInstance(requireContext()).newsArticlesDao
+//        val application = requireNotNull(activity).application
+//
+//        val viewModelProvider = NewsFeedViewModelFactory(newsDao!!, application)
+//        newsFeedViewModel = ViewModelProviders.of(this, viewModelProvider).get(NewsFeedViewModel::class.java)
         viewBinding.newsFeedViewModel = newsFeedViewModel
         if (NewsFeedViewModel.networkConnectivity(requireContext()))
         newsFeedViewModel.getArticles("us","politics", API_KEY)

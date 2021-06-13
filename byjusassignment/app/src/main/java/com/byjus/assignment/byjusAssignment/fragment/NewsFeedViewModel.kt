@@ -8,14 +8,16 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.*
 import com.byjus.assignment.byjusAssignment.database.NewsArticle
-import com.byjus.assignment.byjusAssignment.database.NewsArticlesDao
+import com.byjus.assignment.byjusAssignment.database.NewsArticlesDatabase
 import com.byjus.assignment.byjusAssignment.model.NewsListt
 import com.byjus.assignment.byjusAssignment.rest.ApiClient
 import com.byjus.assignment.byjusAssignment.rest.ApiInterface
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
+import javax.inject.Inject
 
-
-class NewsFeedViewModel(private val database: NewsArticlesDao, application: Application) :
+@HiltViewModel
+class NewsFeedViewModel @Inject constructor(private val database: NewsArticlesDatabase) :
     ViewModel() {
 
     private var _newsArticleLiveData = MutableLiveData<NewsListt.NewsList>()
@@ -23,7 +25,7 @@ class NewsFeedViewModel(private val database: NewsArticlesDao, application: Appl
 
     private var newsList = mutableListOf<NewsListt.Article>()
 
-    private val allArticlesDb = database.getAllArticles()
+    private val allArticlesDb = database.newsArticlesDao.getAllArticles()
 
     val convertedArticlesDb = Transformations.map(allArticlesDb) {
         it?.forEach { newsArticle ->
@@ -109,7 +111,7 @@ class NewsFeedViewModel(private val database: NewsArticlesDao, application: Appl
 
     private suspend fun insert(article: NewsArticle) {
         withContext(Dispatchers.IO) {
-            database.insertArticle(article)
+            database.newsArticlesDao.insertArticle(article)
         }
     }
 
@@ -121,17 +123,9 @@ class NewsFeedViewModel(private val database: NewsArticlesDao, application: Appl
 
     private suspend fun clearNewsDb() {
         withContext(Dispatchers.IO) {
-            database.clearDataBase()
+            database.newsArticlesDao.clearDataBase()
         }
     }
 
 
-}
-
-class NewsFeedViewModelFactory(
-    private val database: NewsArticlesDao,
-    private val application: Application
-) : ViewModelProvider.NewInstanceFactory() {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T =
-        NewsFeedViewModel(database, application) as T
 }

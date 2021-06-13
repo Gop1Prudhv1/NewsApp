@@ -53,9 +53,9 @@ class NewsViewFragment (): Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val article = (arguments?.getSerializable(NEWS_LIST_ITEM) as NewsListt.Article)
-        newsTitle.text = article?.title
-        newsDesc.text = article?.description
-        publishedAt.text = DateUtils.getFormattedDateString(article?.publishedAt)
+        newsTitle.text = article.title
+        newsDesc.text = article.description
+        publishedAt.text = DateUtils.getFormattedDateString(article.publishedAt)
         source.text = article.source.name
 
         Glide.with(requireContext()).load(article.urlToImage).into(object : CustomTarget<Drawable>() {

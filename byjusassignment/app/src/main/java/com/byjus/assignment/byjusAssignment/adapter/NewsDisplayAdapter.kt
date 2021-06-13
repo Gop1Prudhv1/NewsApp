@@ -50,7 +50,7 @@ class NewsDisplayAdapter(var newsList: NewsListt.NewsList, context: Context, val
     }
 
     override fun getItemCount(): Int {
-        return if(newsList.articles!=null) newsList.articles.size else 0
+        return if(null != newsList.articles) newsList.articles.size else 0
     }
 
     inner class NewsHolder(view: View, onItemClicked: (Int) -> Unit): RecyclerView.ViewHolder(view) {

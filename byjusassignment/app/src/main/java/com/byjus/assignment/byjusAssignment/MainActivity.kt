@@ -12,7 +12,9 @@ import androidx.fragment.app.commit
 import com.byjus.assignment.byjus_assignment.R
 import com.byjus.assignment.byjusAssignment.fragment.NewsFeedFragment
 import com.byjus.assignment.byjusAssignment.fragment.NewsViewFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
