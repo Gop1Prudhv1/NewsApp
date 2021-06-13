@@ -1,9 +1,12 @@
 package com.byjus.assignment.byjusAssignment.fragment
 
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
@@ -33,8 +36,8 @@ class NewsFeedFragment(): Fragment() {
     private var newsDao: NewsArticlesDao? = null
     private var newsDisplayAdapter: NewsDisplayAdapter? = null
     private lateinit var newsFeedViewModel: NewsFeedViewModel
-//    private lateinit var newsFVmodel: NewsFeedViewModel
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -43,78 +46,53 @@ class NewsFeedFragment(): Fragment() {
         viewBinding = FragmentNewsFeedBinding.inflate(layoutInflater)
         newsDao = NewsArticlesDatabase.getInstance(requireContext()).newsArticlesDao
         val application = requireNotNull(activity).application
-//        val newsFeedViewModel: NewsFeedViewModel by viewModels{ NewsFeedViewModelFactory(newsDao!!, requireNotNull(activity).application)}
-        //viewBinding.newsFeedViewModel = newsFeedViewModel
-//        newsFVmodel = newsFeedViewModel
-
-//        viewBinding.lifecycleOwner = this
-//        val newsFeedViewModel: NewsFeedViewModel by viewModels()
-//        newsFeedViewModel.getArticles("us","politics", API_KEY)
-        //initObservers(newsFeedViewModel)
-//        newsFVmodel = newsFeedViewModel
 
         val viewModelProvider = NewsFeedViewModelFactory(newsDao!!, application)
         newsFeedViewModel = ViewModelProviders.of(this, viewModelProvider).get(NewsFeedViewModel::class.java)
         viewBinding.newsFeedViewModel = newsFeedViewModel
+        if (NewsFeedViewModel.networkConnectivity(requireContext()))
+        newsFeedViewModel.getArticles("us","politics", API_KEY)
         viewBinding.lifecycleOwner = this
-        return view
+        initObservers(newsFeedViewModel)
+        return viewBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewBinding.newsRecyclerView.layoutManager = LinearLayoutManager(activity)
 
-//        newsList = NewsList.NewsList("a",0,
-//                mutableListOf((NewsList.Article(NewsList.Source(" a"," b"),"a","b","","c "," d","e "," f")),
-//                        (NewsList.Article(NewsList.Source(" a"," b"),"a","b","","c "," d","e "," f"))))
-        //newsFeedViewModel.getArticles("us","politics", API_KEY)
+//        newsList = NewsListt.NewsList("a",0,
+//                mutableListOf((NewsListt.Article(NewsListt.Source(" a"," b"),"a","b","","c "," d","e "," f")),
+//                        (NewsListt.Article(NewsListt.Source(" a"," b"),"a","b","","c "," d","e "," f"))))
+        newsList = NewsListt.NewsList()
+        newsDisplayAdapter = NewsDisplayAdapter(newsList!!, requireContext()){
+            val bundle = Bundle()
+            bundle.putSerializable(NewsViewFragment.NEWS_LIST_ITEM, it)
+            (activity as MainActivity).supportFragmentManager.commit {
+                replace(
+                    R.id.fragment_container,
+                    NewsViewFragment.newInstance(bundle)
+                ).addToBackStack("NEWSVIEWFRAGMENT")
+            }
+        }
 
-//        newsFVmodel.getArticles("us","politics", API_KEY)
-//        val newsFeedViewModel: NewsFeedViewModel by viewModels()
-//        newsFeedViewModel.getArticles("us","politics", API_KEY)
-        getNewsList()
-        //initObservers(newsFeedViewModel)
+        viewBinding.newsRecyclerView.adapter = newsDisplayAdapter
+
     }
 
-    private fun getNewsList() {
-        val call: Call<NewsListt.NewsList> = ApiClient.getClient().create(ApiInterface::class.java)
-                        .getLatestNews("us","politics", API_KEY)
-        call.enqueue(object : Callback<NewsListt.NewsList>{
-            override fun onResponse(call: Call<NewsListt.NewsList>, response: Response<NewsListt.NewsList>) {
-                newsList = response.body()
-                newsDisplayAdapter = NewsDisplayAdapter(newsList!!, requireContext()) {
-                    val bundle = Bundle()
-                    bundle.putSerializable(NewsViewFragment.NEWS_LIST_ITEM, it)
-                    (activity as MainActivity).supportFragmentManager.commit {
-                        replace(
-                            R.id.fragment_container,
-                            NewsViewFragment.newInstance(bundle)
-                        ).addToBackStack("NEWSVIEWFRAGMENT")
-                    }
-                }
-                viewBinding.newsRecyclerView.adapter = newsDisplayAdapter
-            }
 
-            override fun onFailure(call: Call<NewsListt.NewsList>, t: Throwable) {
 
-            }
-
-        })
-    }
+    @RequiresApi(Build.VERSION_CODES.M)
     private fun initObservers(newsFeedViewModel: NewsFeedViewModel) {
         lifecycleScope.launchWhenStarted {
-            newsFeedViewModel._newsArticleLiveData.observe(viewLifecycleOwner, Observer {
-                newsDisplayAdapter = NewsDisplayAdapter(it, requireContext()) {
-                    val bundle = Bundle()
-                    bundle.putSerializable(NewsViewFragment.NEWS_LIST_ITEM, it)
-                    (activity as MainActivity).supportFragmentManager.commit {
-                        replace(
-                            R.id.fragment_container,
-                            NewsViewFragment.newInstance(bundle)
-                        ).addToBackStack("NEWSVIEWFRAGMENT")
-                    }
-                }
-                viewBinding.newsRecyclerView.adapter = newsDisplayAdapter
+            newsFeedViewModel.newsArticleLiveData.observe(viewLifecycleOwner, Observer {
+                newsDisplayAdapter?.newsList = it
+                newsDisplayAdapter?.notifyDataSetChanged()
+            })
+
+            if(!NewsFeedViewModel.networkConnectivity(requireContext()))
+            newsFeedViewModel.convertedArticlesDb.observe(viewLifecycleOwner, Observer {
+
             })
         }
     }

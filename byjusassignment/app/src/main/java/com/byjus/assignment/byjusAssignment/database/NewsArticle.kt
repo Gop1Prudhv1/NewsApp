@@ -11,13 +11,14 @@ data class NewsArticle(
 
     @PrimaryKey(autoGenerate = true)
     var articleId: Long = 0L,
-    var source: String = Gson().toJson(NewsListt.Source()),
-    var author: String = "",
-    var title: String = "",
-    var description: String = "",
-    var url: String = "",
-    var urlToImage: String = "",
-    var publishedAt: String = "",
-    var content: String = ""
+
+    var source: String? = "",
+    var author: String? = "",
+    var title: String? = "",
+    var description: String? = "",
+    var url: String? = "",
+    var urlToImage: String? = "",
+    var publishedAt: String? = "",
+    var content: String? = ""
 
 )

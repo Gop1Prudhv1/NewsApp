@@ -21,8 +21,10 @@ class DateUtils {
 
         fun getFormattedDateString(date: String): String {
             var str = ""
-            if(date[10].isDigit()) str = date.substring(0,10)
-            else str = date.substring(0,8) +"0"+date[9]
+            if(date.length>5) {
+                if(date[10].isDigit()) str = date.substring(0,10)
+                else str = date.substring(0,8) +"0"+date[9]
+            }
             return str
         }
     }
