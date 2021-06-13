@@ -14,7 +14,7 @@ interface NewsArticlesDao {
     @Query("DELETE FROM news_articles_table")
     fun clearDataBase()
 
-    @Query("SELECT * FROM news_articles_table ORDER BY articleId DESC")
+    @Query("SELECT * FROM news_articles_table ORDER BY articleId ASC")
     fun getAllArticles(): LiveData<List<NewsArticle>>
 
 }

@@ -50,7 +50,7 @@ class NewsFeedViewModel @Inject constructor(private val database: NewsArticlesDa
             totalResults = 0,
             articles = newsList
         )
-        _newsArticleLiveData.postValue(newsListt)
+        return@map newsListt
     }
 
     companion object {

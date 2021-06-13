@@ -46,11 +46,6 @@ class NewsFeedFragment(): Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         viewBinding = FragmentNewsFeedBinding.inflate(layoutInflater)
-//        newsDao = NewsArticlesDatabase.getInstance(requireContext()).newsArticlesDao
-//        val application = requireNotNull(activity).application
-//
-//        val viewModelProvider = NewsFeedViewModelFactory(newsDao!!, application)
-//        newsFeedViewModel = ViewModelProviders.of(this, viewModelProvider).get(NewsFeedViewModel::class.java)
         viewBinding.newsFeedViewModel = newsFeedViewModel
         if (NewsFeedViewModel.networkConnectivity(requireContext()))
         newsFeedViewModel.getArticles("us","politics", API_KEY)
@@ -94,7 +89,8 @@ class NewsFeedFragment(): Fragment() {
 
             if(!NewsFeedViewModel.networkConnectivity(requireContext()))
             newsFeedViewModel.convertedArticlesDb.observe(viewLifecycleOwner, Observer {
-
+                newsDisplayAdapter?.newsList = it
+                newsDisplayAdapter?.notifyDataSetChanged()
             })
         }
     }
