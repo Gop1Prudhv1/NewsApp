@@ -1,6 +1,5 @@
 package com.byjus.assignment.byjusAssignment.fragment
 
-import android.app.Application
 import android.content.Context
 import android.net.ConnectivityManager
 import android.os.Build
@@ -45,12 +44,11 @@ class NewsFeedViewModel @Inject constructor(private val database: NewsArticlesDa
             )
             newsList.add(article)
         }
-        val newsListt = NewsListt.NewsList(
+        return@map NewsListt.NewsList(
             status = "",
             totalResults = 0,
             articles = newsList
         )
-        return@map newsListt
     }
 
     companion object {
@@ -103,7 +101,7 @@ class NewsFeedViewModel @Inject constructor(private val database: NewsArticlesDa
 
     private val uiScope = CoroutineScope(Dispatchers.Main + job)
 
-    fun insertArticlesIntoDB(article: NewsArticle) {
+    private fun insertArticlesIntoDB(article: NewsArticle) {
         uiScope.launch {
             insert(article)
         }
@@ -115,7 +113,7 @@ class NewsFeedViewModel @Inject constructor(private val database: NewsArticlesDa
         }
     }
 
-    fun clearDb() {
+    private fun clearDb() {
         uiScope.launch {
             clearNewsDb()
         }

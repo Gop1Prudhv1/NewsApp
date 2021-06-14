@@ -9,6 +9,16 @@
     android:paddingLeft="24dp"
     android:paddingRight="24dp">
 
+    <ImageView
+        android:id="@+id/back_button"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_marginTop="40dp"
+        android:src="@drawable/ic_round_arrow_back_24"
+        android:background="@drawable/round_back_arrow_bg"/>
+
     <TextView
         android:id="@+id/news_view_title"
         android:layout_width="match_parent"
@@ -20,7 +30,7 @@
         android:textColor="@color/white"
         android:textSize="29sp"
         android:textStyle="bold"
-        android:fontFamily="serif-monospace"/>
+        android:fontFamily="serif"/>
 
     <TextView
         android:id="@+id/news_view_source"

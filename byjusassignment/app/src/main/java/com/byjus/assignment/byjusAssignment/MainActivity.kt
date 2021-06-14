@@ -7,7 +7,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toolbar
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.commit
 import com.byjus.assignment.byjus_assignment.R
 import com.byjus.assignment.byjusAssignment.fragment.NewsFeedFragment
@@ -21,8 +21,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        supportActionBar?.hide()
-        supportActionBar?.setBackgroundDrawable(ColorDrawable(Color.parseColor("#000000")))
         showNewsScreen()
     }
 
